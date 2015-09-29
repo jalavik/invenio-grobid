@@ -71,7 +71,7 @@ define([
             }));
           });
 
-          $('.container-results').html(waitingTemplate);
+          $('.container-results').html('<i class="fa fa-cog fa-spin grobid-primary grobid-huge grobid-center"></i>');
         });
       };
 

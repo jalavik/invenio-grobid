@@ -81,7 +81,14 @@ def element_to_author(el):
 
     result['name'] = ' '.join(name)
 
-    #FIXME(jacquerie): parse affiliation.
+    result['affiliations'] = []
+
+    for affiliation in el.xpath('.//tei:affiliation', namespaces=NS):
+        for institution in affiliation.xpath(
+                ".//tei:orgName[@type='institution']", namespaces=NS):
+            result['affiliations'].append({
+                "value": institution.text
+            })
 
     return result
 
@@ -93,8 +100,8 @@ def element_to_reference(el):
     if title and len(title) == 1:
         result['ref_title'] = title[0].text
 
-    #FIXME(jacquerie): parse authors and pubnote.
-
+    # FIXME(jacquerie): parse authors and pubnote.
+    # journal title: r.xpath(".//tei:monogr/tei:title[@level='j']", namespaces=NS)
     return result
 
 
