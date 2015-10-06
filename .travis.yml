@@ -29,6 +29,7 @@ sudo: false
 services:
   - mysql
   - redis
+  - elasticsearch
 
 language: python
 
@@ -46,7 +47,7 @@ python:
 
 before_install:
   - "travis_retry pip install --upgrade pip"
-  - "travis_retry pip install coveralls"
+  - "travis_retry pip install check-manifest mock twine wheel coveralls"
   - "python requirements.py --extras=$REXTRAS --level=min > .travis-lowest-requirements.txt"
   - "python requirements.py --extras=$REXTRAS --level=pypi > .travis-release-requirements.txt"
   - "python requirements.py --extras=$REXTRAS --level=dev > .travis-devel-requirements.txt"
@@ -63,6 +64,7 @@ before_script:
   - "inveniomanage database create --quiet || echo ':('"
 
 script:
+  - "check-manifest --ignore .travis-\\*-requirements.txt"
   - "sphinx-build -qnN docs docs/_build/html"
   - "python setup.py test"
 
@@ -74,6 +76,7 @@ deploy:
   user: inspirehep
   password:
     secure: DIL6/onKZ2zogDqF3Fl77pcti7v/3tNbRmwTI9rwtnwiGVnc4Xzp3LLwzIe5bsubbJ47FOjEGJDEJli2qK6Jk+to5+xVKHYa75uGKVAwaCuuFRhxPVSCfSqb6TK/Vi1THBDLq5muUoGgVJu3rujAUq3YZuHD9U68JNgHlcACIeE=
+  distributions: "compile_catalog sdist bdist_wheel"
   on:
     tags: true
     repo: inspirehep/invenio-grobid
